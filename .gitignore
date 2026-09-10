@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+*.local
+.vite
+
+# Kiro steering —— 不提交
+# 这些是 KONE Design System 团队维护的内部规范文档（Token 体系、icon 清单、
+# 页面模板与组件规格），不是本项目的资产，也不参与构建。
+# 本仓库是公开的，因此排除。需要它们时从 DS 团队处获取。
+.kiro/

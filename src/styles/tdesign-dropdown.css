@@ -1,0 +1,86 @@
+/* ==========================================================================
+   TDesign Dropdown → KONE 定制覆盖
+   规格来源：.kiro/steering/web-components.md「Dropdown 下拉菜单」
+            （Figma b5cc1y3jzLmOQkpa8vz5AX node 24901:36226）
+
+   为什么是全局样式而不是 scoped：
+     Dropdown 面板由 TDesign 通过 Popup 挂到 body 下（portal），
+     组件内的 scoped / :deep() 选择器到不了它。
+
+   为什么只有这几条：
+     style.css 已经把 --td-* 变量整体映射到 China Token，所以下面这些已自动一致，
+     无需重复覆盖 —— 面板 padding 6px（--td-pop-padding-m = 6px）、面板 gap 2px、
+     面板 0.5px 边框与 radius-medium、选项 padding 3px 8px
+     （calc(--td-comp-paddingTB-xs 4px - 1px) + --td-comp-paddingLR-s 8px）、
+     选项 radius-default、14px/22px 字号行高、icon 16px + 间距 8px、
+     选中态 brand-color-light + brand-color、error 态 error-color / error-color-light、
+     禁用文字 text-color-disabled、分割线线色（--td-border-level-1-color → component-stroke）。
+
+   宽度不在这里改：用 <t-dropdown :min-column-width="148" :max-column-width="148" />
+   官方 prop 实现（选项 148 + 面板左右 padding 各 6 = 面板 160），
+   符合「优先使用 TDesign 官方 prop，不要用 CSS 硬改」的规范。
+   ========================================================================== */
+
+/* ── 1. 阴影 ───────────────────────────────────────────────────────────────
+   TDesign --td-shadow-2 是三层叠加阴影，KONE 规格是单层 Light/Shadow/2。 */
+.t-dropdown,
+.t-dropdown__submenu {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ── 2. hover 背景 ─────────────────────────────────────────────────────────
+   TDesign 用 bg-color-container-hover(#f5f7fa)，KONE 规格是 bg-color-component(#f2f4f7)。
+   注意：hover / active 背景与 theme 无关，两个主题都用灰色。 */
+.t-dropdown__item--theme-default:hover,
+.t-dropdown__item--theme-error:hover,
+.t-dropdown__item--theme-success:hover,
+.t-dropdown__item--theme-warning:hover {
+  background-color: var(--bg-color-component);
+}
+
+/* ── 3. active 背景 ────────────────────────────────────────────────────────
+   与 TDesign 的 bg-color-container-active 当前同值（#dfe1e8），
+   但语义上 KONE 规格指定的是 component-stroke，这里显式写成规格里的 token，
+   避免将来 container-active 调整时静默漂移。 */
+.t-dropdown__item--theme-default:active,
+.t-dropdown__item--theme-error:active,
+.t-dropdown__item--theme-success:active,
+.t-dropdown__item--theme-warning:active {
+  background-color: var(--component-stroke);
+}
+
+/* ── 4. 选中态的 hover / active ────────────────────────────────────────────
+   TDesign 会在选中项 hover 时把背景改成灰色，选中态视觉就丢了。
+   KONE 规格没有定义「选中 + hover」这一组合，这里保持选中背景不变。
+   ⚠️ 这是实现侧的判断，不是设计稿明确规定；若设计另有要求以设计为准。 */
+.t-dropdown__item--theme-default.t-dropdown__item--active:hover,
+.t-dropdown__item--theme-default.t-dropdown__item--active:active {
+  background-color: var(--brand-color-light);
+}
+
+.t-dropdown__item--theme-error.t-dropdown__item--active:hover,
+.t-dropdown__item--theme-error.t-dropdown__item--active:active {
+  background-color: var(--error-color-light);
+}
+
+/* ── 5. 禁用态 ─────────────────────────────────────────────────────────────
+   TDesign 给禁用项的 hover 也加了背景，KONE 规格是透明。
+   同时禁用态覆盖 theme：不论 default 还是 error，文字都是 text-color-disabled。 */
+.t-dropdown__item--disabled,
+.t-dropdown__item--disabled:hover,
+.t-dropdown__item--disabled:active,
+.t-dropdown__item--theme-default.t-dropdown__item--disabled:hover,
+.t-dropdown__item--theme-error.t-dropdown__item--disabled:hover,
+.t-dropdown__item--theme-success.t-dropdown__item--disabled:hover,
+.t-dropdown__item--theme-warning.t-dropdown__item--disabled:hover {
+  background-color: transparent;
+  color: var(--text-color-disabled);
+}
+
+/* ── 6. 分割线间距 ─────────────────────────────────────────────────────────
+   线色已由 --td-border-level-1-color → component-stroke 自动正确。
+   TDesign 的 margin 是 4px 8px 2px（上下不对称），KONE 规格是上下各 2px。 */
+.t-dropdown__menu .t-divider {
+  margin: 2px 8px;
+  width: calc(100% - 16px);
+}

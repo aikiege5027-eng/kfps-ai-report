@@ -1,0 +1,208 @@
+{
+  "$comment": [
+    "已落地 icon 的精确来源与规格。iconPaths.ts 里每个条目都对应本文件一项。",
+    "这份表是实测结果（Figma get_metadata 取偏移 + download_assets 取路径 + 与模板站逐点比对），",
+    "不是从设计稿目录抄的名字。新增 icon 时同步补一条，不要只改 iconPaths.ts。",
+    "design-system-vue.md 通过 #[[file:...]] 引用本文件，改这里 steering 会自动跟着更新。"
+  ],
+
+  "sources": {
+    "designTokenChina": {
+      "fileKey": "vuD3onrb6PS5UtMrGdgbrA",
+      "fileName": "Design Token China",
+      "iconPage": "192:1494",
+      "iconPageName": "💰Icon",
+      "iconFrame": "2371:26"
+    },
+    "templateSite": {
+      "url": "（KONE 内部 Design System 参考实现站，地址见内部 steering 文档）",
+      "note": "设计团队发布的参考实现。个别 icon 在 Design Token 之外做过规整，与 DT 不逐点相同。"
+    }
+  },
+
+  "conventions": {
+    "viewBox": "0 0 16 16",
+    "fill": "currentColor",
+    "offsetHandling": [
+      "Figma 导出的 SVG 是矢量的紧包围盒，不是 16×16 画框，且矢量在 symbol 内并非居中。",
+      "必须用 get_metadata 取矢量在 symbol 内的 x/y，再用 <g transform=\"translate(x y)\"> 包住，",
+      "外层统一 viewBox=\"0 0 16 16\"。省掉这一步，多个 icon 并排时大小和基线都会错。"
+    ],
+    "sizeRule": [
+      "尺寸不是随便定的：BaseIcon 不传 size 时按 defaultSize 渲染。",
+      "16px 的图形放大到 20px，描边会按比例变粗 1.25 倍，肉眼明显。",
+      "顶栏操作图标 16px；一级菜单前缀 server 20px。"
+    ]
+  },
+
+  "icons": {
+    "search": {
+      "usedFor": "顶栏操作图标",
+      "source": "designTokenChina",
+      "figmaName": "search",
+      "node": "612:1706",
+      "vectorNode": "611:815",
+      "offset": [2, 2],
+      "vectorSize": [11.707108, 11.999953],
+      "defaultSize": 16,
+      "stroke": "1px",
+      "matchesTemplateSite": true
+    },
+    "languageEn": {
+      "usedFor": "顶栏语言切换 —— 英文界面时显示",
+      "source": "designTokenChina",
+      "figmaName": "Language=English",
+      "node": "623:1815",
+      "vectorNode": "10304:21",
+      "offset": [2, 2],
+      "vectorSize": [12, 12],
+      "defaultSize": 16,
+      "stroke": "1px",
+      "glyph": "圆角方框内嵌语种代码 EN",
+      "matchesTemplateSite": true,
+      "variantGroup": {
+        "frame": "623:1817",
+        "note": "三个变体的矢量偏移与尺寸完全相同（都是 @(2,2) 12×12），只有内部字码不同，可直接互换。",
+        "variants": {
+          "English": "623:1815",
+          "SimplifiedChinese": "623:1816",
+          "TraditionalChinese": "10032:2666"
+        }
+      },
+      "doNotConfuseWith": {
+        "figmaName": "Language",
+        "node": "612:1008",
+        "why": "通用「文/A」翻译字形，与顶栏用的方框+语种代码是完全不同的图形。曾误用过这个。"
+      }
+    },
+    "languageZh": {
+      "usedFor": "顶栏语言切换 —— 中文界面时显示",
+      "source": "designTokenChina",
+      "figmaName": "Language=Simplified Chinese",
+      "node": "623:1816",
+      "vectorNode": "10309:23",
+      "offset": [2, 2],
+      "vectorSize": [12, 12],
+      "defaultSize": 16,
+      "stroke": "1px",
+      "glyph": "圆角方框内嵌语种代码 CH",
+      "variantGroup": {
+        "frame": "623:1817",
+        "siblings": ["623:1815 (English)", "10032:2666 (Traditional Chinese)"]
+      },
+      "note": "繁体变体 10032:2666 尚未引入；需要三语切换时按同样方式补进 iconPaths.ts 与本文件。"
+    },
+    "notification": {
+      "usedFor": "顶栏操作图标",
+      "source": "designTokenChina",
+      "figmaName": "notification",
+      "node": "612:1039",
+      "vectorNode": "611:805",
+      "offset": [2.743734, 2.25],
+      "vectorSize": [10.512543, 11.500002],
+      "defaultSize": 16,
+      "stroke": "1px",
+      "pathCount": 2,
+      "matchesTemplateSite": true
+    },
+    "user": {
+      "usedFor": "顶栏操作图标",
+      "source": "designTokenChina",
+      "figmaName": "user",
+      "node": "615:1737",
+      "vectorNode": "605:2890",
+      "offset": [2.25, 1.599365],
+      "vectorSize": [11.5, 12.900611],
+      "defaultSize": 16,
+      "stroke": "1px",
+      "matchesTemplateSite": true
+    },
+    "server": {
+      "usedFor": "侧边栏一级菜单前缀",
+      "source": "designTokenChina",
+      "figmaName": "server",
+      "node": "612:1704",
+      "vectorNode": "605:3078",
+      "offset": [1.500244, 2],
+      "vectorSize": [13.001085, 12],
+      "defaultSize": 20,
+      "stroke": "1px",
+      "pathCount": 4,
+      "matchesTemplateSite": true,
+      "note": "唯一默认 20px 的 icon。容器 .menu-prefix-icon 也是 20×20，图形铺满。"
+    },
+    "chevronDown": {
+      "usedFor": "菜单收起态箭头",
+      "source": "designTokenChina",
+      "figmaName": "chevron-down",
+      "node": "612:913",
+      "vectorNode": "605:3370",
+      "offset": [2.781745, 5.300787],
+      "vectorSize": [10, 5.563464],
+      "defaultSize": 16,
+      "stroke": "1px",
+      "matchesTemplateSite": true
+    },
+    "chevronUp": {
+      "usedFor": "菜单展开态箭头",
+      "source": "designTokenChina",
+      "figmaName": "chevron-up",
+      "node": "612:922",
+      "vectorNode": "605:3018",
+      "offset": [3.218262, 5.218275],
+      "vectorSize": [10, 5.563464],
+      "defaultSize": 16,
+      "stroke": "1px",
+      "matchesTemplateSite": true,
+      "note": "必须用这个独立 icon，不要对 chevronDown 做 rotate(180deg)：两者在 symbol 内的 y 偏移不同（5.300787 vs 5.218275），旋转会错位。"
+    },
+    "viewList": {
+      "usedFor": "侧边栏底部折叠按钮",
+      "source": "templateSite",
+      "node": null,
+      "defaultSize": 16,
+      "stroke": "1px",
+      "pathCount": 3,
+      "geometry": {
+        "bars": 3,
+        "x": [2, 14],
+        "barY": [[3.5, 4.5], [7.5, 8.5], [11.5, 12.5]],
+        "pitch": 4,
+        "caps": "square"
+      },
+      "decision": "经产品确认以模板站为准。Design Token 中没有逐点相同的资源。",
+      "designTokenSiblings": [
+        {
+          "figmaName": "list",
+          "node": "4057:2429",
+          "vectorNode": "4057:2428",
+          "offset": [3, 4],
+          "vectorSize": [10, 8],
+          "geometry": { "x": [3, 13], "barY": [[4, 5], [7.5, 8.5], [11, 12]], "pitch": 3.5, "caps": "square" },
+          "verdict": "最接近：1px 直角一致，中间那条杠与模板站完全重合；仅窄 2px、行距小 0.5px"
+        },
+        {
+          "figmaName": "view-list",
+          "node": "615:1756",
+          "vectorNode": "605:3193",
+          "offset": [2, 3],
+          "vectorSize": [12, 10],
+          "geometry": { "x": [2, 14], "barY": [[3, 5], [7, 9], [11, 13]], "pitch": 4, "caps": "rounded" },
+          "verdict": "2px 圆头旧版资源，视觉明显偏粗。曾误用，是「折叠 icon 看起来很粗」的根因，不要再用"
+        },
+        {
+          "figmaName": "list-rectangle",
+          "node": "3600:5546",
+          "vectorSize": [12, 12],
+          "verdict": "方框内三条竖杠，形态不同"
+        }
+      ]
+    }
+  },
+
+  "verification": {
+    "method": "把 iconPaths.ts 的 transform=\"translate(x y)\" 精确折算进路径坐标，与模板站的绝对坐标逐指令逐数值比对",
+    "result": "8/8 一致，最大坐标偏差 0.00007px（Figma 导出有效位数与浮点加法的舍入）",
+    "caveat": "只看 SVG 的 width/height 属性判断是否一致是不够的 —— view-list 与 language 两次错都是这样漏掉的，必须比 path 数据本身"
+  }
+}

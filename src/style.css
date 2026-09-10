@@ -1,0 +1,340 @@
+/* ==========================================================================
+   KONE China Design Token — 全局变量层
+   来源：.kiro/steering/design-system-vue.md
+   结构：
+     1. :root                  China Token / Light（默认）
+     2. [data-theme='dark']    China Token / Dark
+     3. 尺寸与圆角（不随主题变化）
+     4. TDesign CSS 变量覆盖（--td-*），让所有 TDesign 组件自动使用 China Token
+     5. 全局 reset 与字体
+   规则：
+     - 业务代码只使用语义化 token（var(--brand-color) 等），不要直接写十六进制色值
+     - 全圆使用 var(--radius-circle)（9999px），不得写 50%
+   ========================================================================== */
+
+/* ============================ 1. China Token / Light ====================== */
+:root {
+  /* -- 品牌色 -- */
+  --brand-color: #1450f5;
+  --brand-color-hover: #4373f7;
+  --brand-color-active: #1444c8;
+  --brand-color-disabled: #a1b9fb;
+  --brand-color-light: #f3f6fe;
+  --brand-color-focus: #d0dcfd;
+  --brand-color-light-hover: #d0dcfd;
+  --brand-color-light-active: #a1b9fb;
+  --brand-color-light-disabled: #f3f6fe;
+
+  /* -- 状态色：成功 -- */
+  --success-color: #1ed273;
+  --success-color-hover: #4bdb8f;
+  --success-color-active: #16b662;
+  --success-color-disabled: #8ceeba;
+  --success-color-light: #dbfbea;
+  --success-color-focus: #b2f5d2;
+
+  /* -- 状态色：警告 -- */
+  --warning-color: #f98600;
+  --warning-color-hover: #ffb145;
+  --warning-color-active: #d97019;
+  --warning-color-disabled: #ffd18d;
+  --warning-color-light: #fff1db;
+  --warning-color-focus: #ffe1b3;
+
+  /* -- 状态色：错误 -- */
+  --error-color: #f51414;
+  --error-color-hover: #f74343;
+  --error-color-active: #c41010;
+  --error-color-disabled: #fba1a1;
+  --error-color-light: #fef3f3;
+  --error-color-focus: #fdd0d0;
+
+  /* -- 文字色 -- */
+  --text-color-primary: #141414;
+  --text-color-secondary: #676a72;
+  --text-color-placeholder: #8f9195;
+  --text-color-disabled: #abadb2;
+  --text-color-white: #ffffff;
+  --text-color-brand: #1450f5;
+  --text-color-link: #1450f5;
+
+  /* -- 背景色 -- */
+  --bg-color-page: #f5f7fa;
+  --bg-color-container: #ffffff;
+  --bg-color-container-hover: #f5f7fa;
+  --bg-color-container-active: #dfe1e8;
+  --bg-color-secondarycontainer: #f5f7fa;
+  --bg-color-secondarycontainer-hover: #dfe1e8;
+  --bg-color-secondarycontainer-active: #c8cad0;
+  --bg-color-component: #f2f4f7;
+  --bg-color-component-hover: #dfe1e8;
+  --bg-color-component-active: #8f9195;
+  --bg-color-component-disabled: #f2f4f7;
+
+  /* -- 边框 -- */
+  --component-border: #c8cad0;
+  --component-stroke: #dfe1e8;
+}
+
+/* ============================ 2. China Token / Dark ====================== */
+[data-theme='dark'] {
+  /* -- 品牌色（深色模式引用 Primitives-Dark/color.blue） -- */
+  --brand-color: #0a84ff;
+  --brand-color-hover: #086acc;
+  --brand-color-active: #3b9dff;
+  --brand-color-disabled: #064f99;
+  --brand-color-light: #021a33;
+  --brand-color-focus: #043566;
+  --brand-color-light-hover: #043566;
+  --brand-color-light-active: #064f99;
+  --brand-color-light-disabled: #021a33;
+
+  /* -- 状态色：成功 -- */
+  --success-color: #1ed273;
+  --success-color-hover: #16b662;
+  --success-color-active: #4bdb8f;
+  --success-color-disabled: #0f9950;
+  --success-color-light: #03331a;
+  --success-color-focus: #14663b;
+
+  /* -- 状态色：警告 -- */
+  --warning-color: #ff9f0a;
+  --warning-color-hover: #cc7f08;
+  --warning-color-active: #ffb23b;
+  --warning-color-disabled: #995f06;
+  --warning-color-light: #332002;
+  --warning-color-focus: #664004;
+
+  /* -- 状态色：错误 -- */
+  --error-color: #ff453a;
+  --error-color-hover: #cc372e;
+  --error-color-active: #ff6a61;
+  --error-color-disabled: #992923;
+  --error-color-light: #330e0b;
+  --error-color-focus: #66231f;
+
+  /* -- 文字色 -- */
+  --text-color-primary: #ffffff;
+  --text-color-secondary: #f2f4f7;
+  --text-color-placeholder: #8f9195;
+  --text-color-disabled: #676a72;
+  --text-color-white: #ffffff;
+  --text-color-brand: #0a84ff;
+  --text-color-link: #0a84ff;
+
+  /* -- 背景色 -- */
+  --bg-color-page: #000000;
+  --bg-color-container: #141414;
+  --bg-color-component: #262a33;
+
+  /* 以下 5 个 token 的深色值未在 design-system-vue.md 的「主要差异」表中列出，
+     此处按 Primitives-Dark/color.grey 阶梯与浅色模式相同的层级关系推导。
+     若 Figma 中已有确切值，应回填并同步 steering。 */
+  --bg-color-container-hover: #1d1f26; /* 推导：grey.775 */
+  --bg-color-container-active: #262a33; /* 推导：grey.750 */
+  --bg-color-secondarycontainer: #1d1f26; /* 推导：grey.775 */
+  --bg-color-secondarycontainer-hover: #262a33; /* 推导：grey.750 */
+  --bg-color-secondarycontainer-active: #333740; /* 推导：grey.725 */
+  --bg-color-component-hover: #333740; /* 推导：grey.725 */
+  --bg-color-component-active: #43464f; /* 推导：grey.700 */
+  --bg-color-component-disabled: #1d1f26; /* 推导：grey.775 */
+
+  /* -- 边框 -- */
+  --component-border: #676a72;
+  --component-stroke: #333740;
+}
+
+/* ==================== 3. 圆角 / 组件尺寸 / 间距（不随主题变化） =========== */
+:root {
+  /* -- 圆角 -- */
+  --radius-small: 2px;
+  --radius-default: 4px;
+  --radius-medium: 6px;
+  --radius-large: 8px;
+  --radius-extralarge: 12px;
+  /* 设计语义为全圆 50%；Web 实现固定为 9999px。
+     不得在 CSS 中直接写 50%，矩形元素会被拉成椭圆。 */
+  --radius-circle: 9999px;
+
+  /* -- 组件尺寸 -- */
+  --comp-size-xxxs: 16px;
+  --comp-size-xxs: 20px;
+  --comp-size-xs: 24px;
+  --comp-size-s: 28px;
+  --comp-size-m: 32px;
+  --comp-size-l: 36px;
+  --comp-size-xl: 40px;
+  --comp-size-xxl: 48px;
+  --comp-size-xxxl: 56px;
+  --comp-size-xxxxl: 64px;
+  --comp-size-xxxxxl: 72px;
+
+  /* -- 基础尺寸单位（间距 / 内外边距） -- */
+  --size-2: 2px;
+  --size-4: 4px;
+  --size-6: 6px;
+  --size-8: 8px;
+  --size-12: 12px;
+  --size-16: 16px;
+  --size-20: 20px;
+  --size-24: 24px;
+  --size-28: 28px;
+  --size-32: 32px;
+  --size-36: 36px;
+  --size-40: 40px;
+  --size-48: 48px;
+  --size-56: 56px;
+  --size-64: 64px;
+  --size-72: 72px;
+
+  /* -- 字体：系统字体，只规定字重与行高，不指定字体文件 -- */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue',
+    Arial, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+}
+
+/* ================= 4. TDesign CSS 变量覆盖（--td-*） ===================== */
+/* 在 :root / [data-theme] 层统一覆盖，所有 TDesign 组件自动生效。
+   业务组件内不需要再用 :deep() + !important 逐个改色。 */
+:root,
+[data-theme='light'],
+[data-theme='dark'] {
+  /* -- 品牌色 -- */
+  --td-brand-color: var(--brand-color);
+  --td-brand-color-hover: var(--brand-color-hover);
+  --td-brand-color-active: var(--brand-color-active);
+  --td-brand-color-disabled: var(--brand-color-disabled);
+  --td-brand-color-focus: var(--brand-color-focus);
+  --td-brand-color-light: var(--brand-color-light);
+  --td-brand-color-light-hover: var(--brand-color-light-hover);
+  --td-brand-color-light-active: var(--brand-color-light-active);
+
+  /* -- 状态色 -- */
+  --td-success-color: var(--success-color);
+  --td-success-color-hover: var(--success-color-hover);
+  --td-success-color-active: var(--success-color-active);
+  --td-success-color-disabled: var(--success-color-disabled);
+  --td-success-color-light: var(--success-color-light);
+  --td-success-color-focus: var(--success-color-focus);
+
+  --td-warning-color: var(--warning-color);
+  --td-warning-color-hover: var(--warning-color-hover);
+  --td-warning-color-active: var(--warning-color-active);
+  --td-warning-color-disabled: var(--warning-color-disabled);
+  --td-warning-color-light: var(--warning-color-light);
+  --td-warning-color-focus: var(--warning-color-focus);
+
+  --td-error-color: var(--error-color);
+  --td-error-color-hover: var(--error-color-hover);
+  --td-error-color-active: var(--error-color-active);
+  --td-error-color-disabled: var(--error-color-disabled);
+  --td-error-color-light: var(--error-color-light);
+  --td-error-color-focus: var(--error-color-focus);
+
+  /* -- 文字色（TDesign 用 anti 表示反色文字） -- */
+  --td-text-color-primary: var(--text-color-primary);
+  --td-text-color-secondary: var(--text-color-secondary);
+  --td-text-color-placeholder: var(--text-color-placeholder);
+  --td-text-color-disabled: var(--text-color-disabled);
+  --td-text-color-anti: var(--text-color-white);
+  --td-text-color-brand: var(--text-color-brand);
+  --td-text-color-link: var(--text-color-link);
+
+  /* -- 背景色 -- */
+  --td-bg-color-page: var(--bg-color-page);
+  --td-bg-color-container: var(--bg-color-container);
+  --td-bg-color-container-hover: var(--bg-color-container-hover);
+  --td-bg-color-container-active: var(--bg-color-container-active);
+  --td-bg-color-container-select: var(--brand-color-light);
+  --td-bg-color-secondarycontainer: var(--bg-color-secondarycontainer);
+  --td-bg-color-secondarycontainer-hover: var(--bg-color-secondarycontainer-hover);
+  --td-bg-color-secondarycontainer-active: var(--bg-color-secondarycontainer-active);
+  --td-bg-color-component: var(--bg-color-component);
+  --td-bg-color-component-hover: var(--bg-color-component-hover);
+  --td-bg-color-component-active: var(--bg-color-component-active);
+  --td-bg-color-component-disabled: var(--bg-color-component-disabled);
+
+  /* -- 边框 --
+     TDesign 用 border-level-1/2 表达描边层级：
+     level-1 对应较浅的 component-stroke，level-2 对应 component-border */
+  --td-border-level-1-color: var(--component-stroke);
+  --td-border-level-2-color: var(--component-border);
+  --td-component-stroke: var(--component-stroke);
+  --td-component-border: var(--component-border);
+
+  /* -- 圆角 -- */
+  --td-radius-small: var(--radius-small);
+  --td-radius-default: var(--radius-default);
+  --td-radius-medium: var(--radius-medium);
+  --td-radius-large: var(--radius-large);
+  --td-radius-extraLarge: var(--radius-extralarge);
+  --td-radius-round: var(--radius-circle);
+  --td-radius-circle: var(--radius-circle);
+
+  /* -- 字体 -- */
+  --td-font-family: var(--font-family);
+}
+
+/* ---- TDesign 品牌色阶（1–10，浅 → 深），映射 KONE 品牌蓝 ladder ---- */
+:root {
+  --td-brand-color-1: #f3f6fe; /* blue.50  */
+  --td-brand-color-2: #e7edfe; /* blue.70  */
+  --td-brand-color-3: #d0dcfd; /* blue.100 */
+  --td-brand-color-4: #a1b9fb; /* blue.200 */
+  --td-brand-color-5: #7296f9; /* blue.300 */
+  --td-brand-color-6: #4373f7; /* blue.400 */
+  --td-brand-color-7: #1450f5; /* blue.500 */
+  --td-brand-color-8: #1444c8; /* blue.600 */
+  --td-brand-color-9: #14389b; /* blue.700 */
+  --td-brand-color-10: #142c6e; /* blue.800 */
+}
+
+[data-theme='dark'] {
+  --td-brand-color-1: #021a33; /* dark blue.900 */
+  --td-brand-color-2: #043566; /* dark blue.800 */
+  --td-brand-color-3: #064f99; /* dark blue.700 */
+  --td-brand-color-4: #086acc; /* dark blue.600 */
+  --td-brand-color-5: #0a84ff; /* dark blue.500 */
+  --td-brand-color-6: #3b9dff; /* dark blue.400 */
+  --td-brand-color-7: #6cb5ff; /* dark blue.300 */
+  --td-brand-color-8: #9dceff; /* dark blue.200 */
+  --td-brand-color-9: #cee6ff; /* dark blue.100 */
+  --td-brand-color-10: #e7f3ff; /* dark blue.70  */
+}
+
+/* ========================= 5. 全局 reset 与字体 ========================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  /* 字体只在 body 声明一次，组件内使用 font-family: inherit */
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--text-color-primary);
+  background-color: var(--bg-color-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100%;
+}
+
+/* 可访问性：为键盘用户保留清晰的焦点环 */
+:focus-visible {
+  outline: 2px solid var(--brand-color);
+  outline-offset: 2px;
+}
