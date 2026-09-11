@@ -4,7 +4,8 @@
  *
  * 规范来源：Design System 模板站 #/nav 的 `.sidebar` 实现（已比对线上 CSS 与 JS）。
  * 关键规格：
- *   .sidebar          232px / 收起 64px，fixed top:56px，overflow hidden，**没有右边框**
+ *   .sidebar          232px / 收起 64px，fixed top:56px，overflow hidden，
+ *                     border-right component-stroke（本项目在模板站基础上加的，见下）
  *   .sidebar-scroll   flex:1，overflow hidden auto，
  *                     scrollbar-width: thin + scrollbar-color 细滚动条
  *   .menu-expanded    padding 16px 8px 8px，gap 2px
@@ -41,7 +42,7 @@
  *   - 基础菜单永远是叶子，不显示 chevron
  * 本组件按同样规则渲染，占位数据里已覆盖这几种情况，改数据时不用改组件。
  */
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import BaseIcon from './BaseIcon.vue'
 import type { IconName } from '@/assets/icons/iconPaths'
 
@@ -60,40 +61,60 @@ export interface MenuItem {
 const props = withDefaults(
   defineProps<{
     items?: MenuItem[]
+    /**
+     * 受控选中项。传了就以它为准（本应用里由路由驱动，见 AppLayout），
+     * 不传则组件自己记状态，方便单独预览。
+     */
+    activeKey?: string
     defaultActiveKey?: string
     defaultExpandedKeys?: string[]
   }>(),
   {
     items: undefined,
-    // 默认选中首项「对话」；当前菜单全为叶子，没有可展开项
+    activeKey: undefined,
+    // 仅非受控模式生效；应用里的落地页由路由的 redirect 决定
     defaultActiveKey: 'chat',
     defaultExpandedKeys: () => [],
   },
 )
 
 /**
- * 菜单数据。名称来自产品提供的功能清单，「对话」置顶，「系统设置」置底。
+ * 菜单数据。名称来自产品提供的功能清单，「新对话」置顶，「系统设置」置底。
  *
  * 层级：7 个一级叶子菜单 + 1 个带二级菜单的「系统设置」。
  * 角色管理 / 用户管理 / LLM 配置 收归到系统设置之下作为二级菜单。
  * 「个人设置」不在这里 —— 它已移到顶栏账户 icon 的下拉菜单里（见 AppHeader.vue）。
  * 二级菜单不带 icon —— 按设计系统规范，只有一级菜单有 prefix icon。
  *
- * 一级 icon 统一用 server，与参考实现 demo 一致（demo 里所有一级菜单都是这个 icon）。
- * 各功能的专属 icon 待设计给出后再逐项替换，并同步更新 icon-registry.json。
+ * ── 一级 icon 的语义对照（都取自 Design Token China 的 💰Icon 页真实矢量）──
+ *   新对话      chat-1    612:898    对话气泡
+ *   数据源      server    612:1704   服务器机架 = 数据来源
+ *   技能        toolbox   615:1743   工具箱 = 能力集合
+ *   计划分析    chart-1   612:901    方框内折线趋势图
+ *   部件溯源    fork      612:986    一节点分叉到两节点的树形，表达溯源链路
+ *   分享        share     615:1718   标准分享字形
+ *   定时报告    report    612:1712   方框内文本行 = 报告
+ *   系统设置    setting   612:1701   六边形 + 中心圆环（KONE 的 setting 不是齿轮）
+ *
+ * 选型时逐个比对过字形，不是照名字挑的。两个踩过的坑记在这里：
+ *   - `drive`（612:953）看名字像磁盘/数据盘，实际字形是**方向盘**，不能用于「数据源」，
+ *     所以数据源沿用 server。
+ *   - `equipment`（612:972）与 `chart-1` 都是「方框内含内容」的字形，并排时区分度低，
+ *     「部件溯源」因此选了 fork。
+ * 详细规格（node id / 矢量偏移 / 默认尺寸）见 src/assets/icons/icon-registry.json。
  */
 const fallbackItems: MenuItem[] = [
-  { key: 'chat', label: '对话', icon: 'server' },
+  { key: 'chat', label: '新对话', icon: 'chat1' },
   { key: 'datasource', label: '数据源', icon: 'server' },
-  { key: 'skill', label: '技能', icon: 'server' },
-  { key: 'plan-analysis', label: '计划分析', icon: 'server' },
-  { key: 'component-trace', label: '部件溯源', icon: 'server' },
-  { key: 'share', label: '分享', icon: 'server' },
-  { key: 'scheduled-report', label: '定时报告', icon: 'server' },
+  { key: 'skill', label: '技能', icon: 'toolbox' },
+  { key: 'plan-analysis', label: '计划分析', icon: 'chart1' },
+  { key: 'component-trace', label: '部件溯源', icon: 'fork' },
+  { key: 'share', label: '分享', icon: 'share' },
+  { key: 'scheduled-report', label: '定时报告', icon: 'report' },
   {
     key: 'settings',
     label: '系统设置',
-    icon: 'server',
+    icon: 'setting',
     // 二级菜单不带 icon（只有一级菜单有 prefix icon）
     children: [
       { key: 'settings/role', label: '角色管理' },
@@ -106,7 +127,9 @@ const fallbackItems: MenuItem[] = [
 const menuItems = computed(() => props.items ?? fallbackItems)
 
 const collapsed = ref(false)
-const activeKey = ref(props.defaultActiveKey)
+const internalActiveKey = ref(props.defaultActiveKey)
+/** 受控优先：传了 activeKey 就完全听外部的，内部状态只作为非受控模式的兜底 */
+const activeKey = computed(() => props.activeKey ?? internalActiveKey.value)
 const expandedKeys = ref<string[]>([...props.defaultExpandedKeys])
 
 const emit = defineEmits<{
@@ -141,6 +164,34 @@ const branchKeys = computed(() => {
 
 const inActiveBranch = (key: string) => branchKeys.value.get(key)?.has(activeKey.value) ?? false
 
+/** key → 其所有祖先 key。用于选中深层菜单时自动把上层展开 */
+const ancestorKeys = computed(() => {
+  const map = new Map<string, string[]>()
+  const walk = (item: MenuItem, ancestors: string[]) => {
+    map.set(item.key, ancestors)
+    item.children?.forEach((child) => walk(child, [...ancestors, item.key]))
+  }
+  menuItems.value.forEach((item) => walk(item, []))
+  return map
+})
+
+/**
+ * 选中项变化时补齐它的祖先展开状态。
+ * 直接输 URL / 刷新 / 浏览器后退落到二级菜单时，上层必须是展开的，否则看不见高亮。
+ * 只做「补」不做「收」—— 用户手动展开的其他分支不该因为切页被收起。
+ */
+watch(
+  activeKey,
+  (key) => {
+    const ancestors = ancestorKeys.value.get(key)
+    if (!ancestors?.length) return
+    for (const ancestor of ancestors) {
+      if (!expandedKeys.value.includes(ancestor)) expandedKeys.value.push(ancestor)
+    }
+  },
+  { immediate: true },
+)
+
 function toggleExpand(key: string) {
   const index = expandedKeys.value.indexOf(key)
   if (index === -1) expandedKeys.value.push(key)
@@ -148,7 +199,7 @@ function toggleExpand(key: string) {
 }
 
 function select(key: string) {
-  activeKey.value = key
+  internalActiveKey.value = key
   emit('select', key)
 }
 
@@ -263,7 +314,13 @@ function toggleCollapsed() {
   flex-direction: column;
   width: 232px;
   background: var(--bg-color-container);
-  /* 模板站的侧边栏没有右边框，只靠背景色与页面底色区分 */
+  /*
+   * 右边框：模板站原版没有，本项目按产品要求加上，与底部 .sidebar-footer 的
+   * border-top 用同一个 token（component-stroke，比 component-border 浅）。
+   * 全局 `* { box-sizing: border-box }` 已生效，所以这 1px 算在 232px 之内，
+   * AppLayout 的 `.content-area { margin-left: 232px }` 不需要跟着改。
+   */
+  border-right: 1px solid var(--component-stroke);
   overflow: hidden;
   transition: width 0.2s;
 }

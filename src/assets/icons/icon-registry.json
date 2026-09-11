@@ -31,7 +31,12 @@
     "sizeRule": [
       "尺寸不是随便定的：BaseIcon 不传 size 时按 defaultSize 渲染。",
       "16px 的图形放大到 20px，描边会按比例变粗 1.25 倍，肉眼明显。",
-      "顶栏操作图标 16px；一级菜单前缀 server 20px。"
+      "顶栏操作图标 16px；侧边栏一级菜单前缀全部 20px（容器 .menu-prefix-icon 也是 20×20）。"
+    ],
+    "glyphCheck": [
+      "选 icon 必须看字形，不能看名字。已经踩过的两次：",
+      "drive（612:953）名字像磁盘，实际是方向盘；view-list（615:1756）是 2px 圆头旧版。",
+      "做法：get_screenshot 取 16×16 PNG，sips 放大后肉眼确认，再 download_assets 取 path。"
     ]
   },
 
@@ -118,7 +123,7 @@
       "matchesTemplateSite": true
     },
     "server": {
-      "usedFor": "侧边栏一级菜单前缀",
+      "usedFor": "侧边栏一级菜单前缀 —— 数据源",
       "source": "designTokenChina",
       "figmaName": "server",
       "node": "612:1704",
@@ -129,7 +134,221 @@
       "stroke": "1px",
       "pathCount": 4,
       "matchesTemplateSite": true,
-      "note": "唯一默认 20px 的 icon。容器 .menu-prefix-icon 也是 20×20，图形铺满。"
+      "glyph": "两层服务器机架",
+      "note": "曾经是所有一级菜单的占位 icon，现在只用于「数据源」。",
+      "doNotConfuseWith": {
+        "figmaName": "drive",
+        "node": "612:953",
+        "why": "名字像磁盘/数据盘，实际字形是方向盘（驾驶）。「数据源」不能用它，所以留给 server。"
+      }
+    },
+
+    "chat1": {
+      "usedFor": "侧边栏一级菜单前缀 —— 新对话",
+      "source": "designTokenChina",
+      "figmaName": "chat-1",
+      "node": "612:898",
+      "vectorNode": "605:2970",
+      "offset": [1.999994, 2],
+      "vectorSize": [12, 11.413856],
+      "defaultSize": 20,
+      "stroke": "1px",
+      "pathCount": 1,
+      "glyph": "左下带尖角的对话气泡",
+      "designTokenSiblings": [
+        { "figmaName": "chat-2", "node": "612:897", "verdict": "同组另一字形，未核实，不要凭名字换用" },
+        { "figmaName": "chat-3", "node": "612:896", "verdict": "同上" }
+      ]
+    },
+
+    "toolbox": {
+      "usedFor": "侧边栏一级菜单前缀 —— 技能",
+      "source": "designTokenChina",
+      "figmaName": "toolbox",
+      "node": "615:1743",
+      "vectorNode": "605:2946",
+      "offset": [1, 2],
+      "vectorSize": [13.987499, 11],
+      "defaultSize": 20,
+      "stroke": "1px",
+      "pathCount": 1,
+      "glyph": "带提手的工具箱",
+      "note": "矢量宽 13.9875 不是 14，路径里带 .0075 的零碎值是 Figma 原始数据，不要四舍五入。"
+    },
+
+    "chart1": {
+      "usedFor": "侧边栏一级菜单前缀 —— 计划分析",
+      "source": "designTokenChina",
+      "figmaName": "chart-1",
+      "node": "612:901",
+      "vectorNode": "605:2792",
+      "offset": [2, 2],
+      "vectorSize": [12, 12],
+      "defaultSize": 20,
+      "stroke": "1px",
+      "pathCount": 1,
+      "glyph": "方框内折线趋势图（带箭头收尾）",
+      "designTokenSiblings": [
+        { "figmaName": "chart-2", "node": "612:899", "verdict": "柱状图字形，与本条不同" },
+        { "figmaName": "chart-1-filled", "node": "612:900", "verdict": "填充版" }
+      ]
+    },
+
+    "fork": {
+      "usedFor": "侧边栏一级菜单前缀 —— 部件溯源",
+      "source": "designTokenChina",
+      "figmaName": "fork",
+      "node": "612:986",
+      "vectorNode": "605:3256",
+      "offset": [2, 2],
+      "vectorSize": [12, 12],
+      "defaultSize": 20,
+      "stroke": "1px",
+      "pathCount": 1,
+      "glyph": "一个节点向下分叉到两个节点的树形结构",
+      "decision": "「部件溯源」选它而不是 equipment（612:972）：equipment 与 chart-1 都是「方框内含内容」的字形，并排时区分度低；fork 的树形直接表达溯源链路。"
+    },
+
+    "share": {
+      "usedFor": "侧边栏一级菜单前缀 —— 分享",
+      "source": "designTokenChina",
+      "figmaName": "share",
+      "node": "615:1718",
+      "vectorNode": "605:2952",
+      "offset": [2.047852, 1.468628],
+      "vectorSize": [11.90386, 13.115356],
+      "defaultSize": 20,
+      "stroke": "1px",
+      "pathCount": 1,
+      "glyph": "三个圆点由两条斜线相连的标准分享字形"
+    },
+
+    "report": {
+      "usedFor": "侧边栏一级菜单前缀 —— 定时报告",
+      "source": "designTokenChina",
+      "figmaName": "report",
+      "node": "612:1712",
+      "vectorNode": "605:2864",
+      "offset": [2, 2],
+      "vectorSize": [11.999996, 11.999996],
+      "defaultSize": 20,
+      "stroke": "1px",
+      "pathCount": 3,
+      "glyph": "方框内两条长短不等的文本行",
+      "designTokenSiblings": [
+        { "figmaName": "report2", "node": "612:1711", "verdict": "另一字形" },
+        { "figmaName": "report2_new", "node": "612:1710", "verdict": "另一字形" },
+        { "figmaName": "report-filled", "node": "9522:4803", "verdict": "填充版" }
+      ],
+      "note": "「定时」由文案表达，icon 只承载「报告」语义；没有换成 clock/calendar。"
+    },
+
+    "add": {
+      "usedFor": "AI 对话输入条 —— 前置条件（技能）选择按钮",
+      "source": "designTokenChina",
+      "figmaName": "add",
+      "node": "612:875",
+      "vectorNode": "611:861",
+      "offset": [4, 4],
+      "vectorSize": [8, 8],
+      "defaultSize": 28,
+      "stroke": "1px（画在 8×8 的矢量里）",
+      "pathCount": 1,
+      "glyph": "纯十字加号，无外框",
+      "sizeMath": [
+        "矢量只占 16 画框里中间的 8×8，占比 50% —— 这是本清单里占比最低的几个之一。",
+        "所以「渲染尺寸」和「看起来多大」差一倍：可见十字 = 渲染尺寸 ÷ 2，笔画 = 渲染尺寸 ÷ 16。",
+        "  16 → 十字 8px、笔画 1px（DS 图标位的标准值，但在 32 的按钮里几乎看不见）",
+        "  20 → 十字 10px、笔画 1.25px",
+        "  24 → 十字 12px、笔画 1.5px（产品评价「好多了，但还能再大一点点」）",
+        "  28 → 十字 14px、笔画 1.75px  ← 采用",
+        "28 是 32 容器里的实际上限：可见十字 14px 左右各留 9px；",
+        "再往上笔画超过 1.75px，会明显重于同排 1px 的 icon（chip 里的 toolbox 等）。",
+        "尺寸只走基础尺寸单位（…20 / 24 / 28 / 32…），不要用 26 这种不在阶梯上的值。",
+        "落点过程：add-circle 28（过大）→ add-circle 16（过小）→ add 24（接近）→ add 28。"
+      ],
+      "replaces": {
+        "iconName": "addCircle",
+        "why": "带外圈的加号在 32×32 按钮里两头不讨好：圈填满容器就显得过大，缩到 DS 的 16 又只剩 14px 的细圈。产品要求换成纯 + 字形。addCircle 条目保留，未删。"
+      },
+      "doNotConfuseWith": {
+        "figmaName": "add-rectangle",
+        "node": null,
+        "why": "方框内加号，与纯十字不同。清单里还有 add-circle-filled / add-rectangle-filled 两个填充版。"
+      }
+    },
+
+    "addCircle": {
+      "usedFor": "（当前无调用点）曾用于 AI 对话输入条的附件按钮，已被 add 取代",
+      "source": "designTokenChina",
+      "figmaName": "add-circle",
+      "node": "612:876",
+      "vectorNode": "605:3057",
+      "offset": [1, 1],
+      "vectorSize": [14, 14],
+      "defaultSize": 28,
+      "stroke": "1px（画在 16px 画框里）",
+      "pathCount": 2,
+      "glyph": "圆环内十字",
+      "note": "28px 是 Figma 输入条组件本体给的尺寸，14×14 的图形放大到 28 后线宽约 2px，是设计意图。不要为了细一点改尺寸。"
+    },
+
+    "closeM": {
+      "usedFor": "AI 对话输入条 —— 已选模块（技能）的删除按钮",
+      "source": "designTokenChina",
+      "figmaName": "close-M",
+      "node": "1097:22",
+      "vectorNode": "1097:21",
+      "offset": [4, 4],
+      "vectorSize": [8, 8],
+      "defaultSize": 14,
+      "pathCount": 1,
+      "glyph": "叉",
+      "note": "16px 画框里只占中间 8×8，视觉上比同尺寸其他 icon 小一号，这是原始设计，不要放大矢量。",
+      "doNotConfuseWith": {
+        "figmaName": "close-L",
+        "node": "612:946",
+        "why": "更大的叉，画框占比不同"
+      }
+    },
+
+    "arrowUpKone": {
+      "usedFor": "AI 对话输入条 —— 发送按钮",
+      "source": "designTokenChina",
+      "figmaName": "arrow-up-kone",
+      "node": "4324:3106",
+      "vectorNode": "4324:3101",
+      "offset": [2.560698, 2.499985],
+      "vectorSize": [10.878641, 11.500014],
+      "defaultSize": 20,
+      "pathCount": 2,
+      "glyph": "竖线 + 单侧折角箭头头部（KONE 品牌箭头）",
+      "duplicateNode": {
+        "node": "4324:3107",
+        "vectorNode": "4324:3103",
+        "verdict": "同名 symbol，offset/size 与 path 数据逐字一致（已 diff 比对），取 4324:3106 即可"
+      },
+      "doNotConfuseWith": {
+        "figmaName": "arrow-up",
+        "node": "612:884",
+        "why": "普通对称箭头，与品牌箭头字形不同"
+      },
+      "note": "Figma 原始 fill 是 #11161A（Light/Gray/Gray-1），已统一换成 currentColor。"
+    },
+
+    "setting": {
+      "usedFor": "侧边栏一级菜单前缀 —— 系统设置",
+      "source": "designTokenChina",
+      "figmaName": "setting",
+      "node": "612:1701",
+      "vectorNode": "611:817",
+      "offset": [1.937805, 1.154663],
+      "vectorSize": [12.124355, 13.690599],
+      "defaultSize": 20,
+      "stroke": "1px",
+      "pathCount": 2,
+      "glyph": "六边形外框 + 中心圆环",
+      "note": "KONE 的 setting 不是常见的齿轮字形，是六边形。别自己按齿轮画。"
     },
     "chevronDown": {
       "usedFor": "菜单收起态箭头",
@@ -201,8 +420,17 @@
   },
 
   "verification": {
-    "method": "把 iconPaths.ts 的 transform=\"translate(x y)\" 精确折算进路径坐标，与模板站的绝对坐标逐指令逐数值比对",
-    "result": "8/8 一致，最大坐标偏差 0.00007px（Figma 导出有效位数与浮点加法的舍入）",
-    "caveat": "只看 SVG 的 width/height 属性判断是否一致是不够的 —— view-list 与 language 两次错都是这样漏掉的，必须比 path 数据本身"
+    "topBarBatch": {
+      "icons": ["search", "languageEn", "languageZh", "notification", "user", "viewList", "chevronDown", "chevronUp", "server"],
+      "method": "把 iconPaths.ts 的 transform=\"translate(x y)\" 精确折算进路径坐标，与模板站的绝对坐标逐指令逐数值比对",
+      "result": "8/8 一致，最大坐标偏差 0.00007px（Figma 导出有效位数与浮点加法的舍入）"
+    },
+    "sidebarMenuBatch": {
+      "icons": ["chat1", "toolbox", "chart1", "fork", "share", "report", "setting"],
+      "method": "get_metadata 取矢量在 symbol 内的 offset/size；download_assets 取 SVG 后把 path 原样内联（只把 fill=#141414 换成 currentColor）；get_screenshot 放大后逐个确认字形",
+      "result": "7/7 path 数据与 Figma 导出逐字一致；字形已肉眼确认",
+      "note": "模板站的侧边导航 demo 全部用 server，没有这几个 icon 的参考实现，因此不设 matchesTemplateSite"
+    },
+    "caveat": "只看 SVG 的 width/height 属性判断是否一致是不够的 —— view-list 与 language 两次错都是这样漏掉的，必须比 path 数据本身；同理，选 icon 必须看渲染出来的字形，drive 就是名字与字形完全不符的例子"
   }
 }

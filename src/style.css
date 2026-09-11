@@ -74,6 +74,21 @@
   /* -- 边框 -- */
   --component-border: #c8cad0;
   --component-stroke: #dfe1e8;
+
+  /* -- 组件专用（DS 语义层没有对应项，逐个写明理由，不要当后门用）-- */
+  /*
+   * AI 对话输入条的底色。= Primitives color.grey.50。
+   *
+   * 为什么不用语义 token：产品要求比 --bg-color-secondarycontainer(grey.100
+   * #f5f7fa) 再淡一档，而语义层在 grey.100 之上直接跳到 grey.0(白)，中间的
+   * grey.50 没有任何 token；直接用白又会与「新对话」页的白色内容区同色。
+   *
+   * 为什么定在这一层而不是组件里：它需要随主题切换，而 scoped 样式里写
+   * `:global([data-theme='dark']) .chat-input` 会被 Vue 的 scoped 变换吃掉
+   * class、编译成 `[data-theme=dark]`（已踩过，会给整个深色页面刷底色）。
+   * 需要跟主题的值就定在这里。
+   */
+  --chat-input-surface: #fafbfc;
 }
 
 /* ============================ 2. China Token / Dark ====================== */
@@ -142,6 +157,15 @@
   /* -- 边框 -- */
   --component-border: #676a72;
   --component-stroke: #333740;
+
+  /* -- 组件专用 -- */
+  /*
+   * 深色模式没有"再淡一档"这回事：Primitives-Dark 的 grey 在
+   * 775(#1d1f26) 与 800(#141414，= 容器底色) 之间没有中间档。
+   * 所以这里退回 --bg-color-secondarycontainer 的值，与浅色模式调淡前一致。
+   * 注意**不能**沿用浅色的 #fafbfc —— 灰色系不分主题，那个值在深色下是近白色。
+   */
+  --chat-input-surface: #1d1f26;
 }
 
 /* ==================== 3. 圆角 / 组件尺寸 / 间距（不随主题变化） =========== */
